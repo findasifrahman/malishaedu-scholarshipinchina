@@ -41,7 +41,7 @@
                     :src="university.logo_url || '/university-placeholder.png'"
                     :alt="university.name"
                     height="120"
-                    cover
+                    
                     class="d-flex align-center justify-center"
                   >
                     <div v-if="!university.logo_url" class="text-center">

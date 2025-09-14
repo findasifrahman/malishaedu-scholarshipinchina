@@ -51,7 +51,7 @@
                 <v-img
                   :src="program.university_logo || '/university-placeholder.png'"
                   height="120"
-                  cover
+                  
                   class="d-flex align-center justify-center"
                 >
                   <div v-if="!program.university_logo" class="text-center">
