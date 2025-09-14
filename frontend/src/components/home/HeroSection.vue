@@ -175,10 +175,10 @@ const stats = ref([
 
 // Enhanced social links with colors
 const socialLinks = ref([
-  { name: 'LinkedIn', icon: 'mdi-linkedin', url: 'https://linkedin.com/company/malishaedu', color: 'primary' },
-  { name: 'Facebook', icon: 'mdi-facebook', url: 'https://facebook.com/malishaedu', color: 'primary' },
-  { name: 'YouTube', icon: 'mdi-youtube', url: 'https://youtube.com/malishaedu', color: 'primary' },
-  { name: 'Twitter', icon: 'mdi-twitter', url: 'https://twitter.com/malishaedu', color: 'primary' }
+  { name: 'LinkedIn', icon: 'mdi-linkedin', url: 'https://linkedin.com/company/malishaedu', color: 'white' },
+  { name: 'Facebook', icon: 'mdi-facebook', url: 'https://facebook.com/malishaedu', color: 'white' },
+  { name: 'YouTube', icon: 'mdi-youtube', url: 'https://youtube.com/malishaedu', color: 'white' },
+  { name: 'Twitter', icon: 'mdi-twitter', url: 'https://twitter.com/malishaedu', color: 'white' }
 ])
 
 // Auto-rotate words

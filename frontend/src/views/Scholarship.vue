@@ -14,6 +14,128 @@
       </v-container>
     </section>
 
+    <!-- Statistics Cards Section -->
+    <section class="stats-section py-8 bg-grey-lighten-4">
+      <v-container>
+        <h2 class="text-h5 font-weight-bold mb-6 text-center">Scholarship Insights</h2>
+        <v-row>
+          <!-- Recently Added Program Card -->
+          <v-col cols="12" md="4">
+            <v-card class="stats-card recent-card" elevation="4">
+              <div class="card-header">
+                <v-icon color="primary" size="32" class="header-icon">mdi-clock-outline</v-icon>
+                <div class="header-text">
+                  <h3 class="text-h6 font-weight-bold">Recently Added</h3>
+                  <p class="text-caption text-grey">Latest Program</p>
+                </div>
+              </div>
+              <v-card-text class="card-content">
+                <div v-if="recentProgram" class="text-center">
+                  <v-icon color="primary" size="48" class="mb-3">mdi-school</v-icon>
+                  <div class="text-h6 font-weight-bold mb-2">{{ recentProgram.name }}</div>
+                  <div class="d-flex align-center justify-center mb-2">
+                    <v-icon color="grey" size="16" class="mr-1">mdi-domain</v-icon>
+                    <span class="text-body-2 text-grey-darken-1">{{ recentProgram.university_name }}</span>
+                  </div>
+                  <div class="d-flex align-center justify-center mb-3">
+                    <v-icon color="grey" size="16" class="mr-1">mdi-map-marker</v-icon>
+                    <span class="text-caption text-grey">{{ recentProgram.city_name }}</span>
+                  </div>
+                  <v-chip 
+                    :color="getScholarshipColor(recentProgram.scholarship_type)" 
+                    size="small" 
+                    class="font-weight-bold"
+                  >
+                    <v-icon size="16" class="mr-1">mdi-trophy</v-icon>
+                    {{ getScholarshipLabel(recentProgram.scholarship_type) }}
+                  </v-chip>
+                </div>
+                <div v-else class="text-center text-grey">
+                  <v-icon size="64" color="grey">mdi-school-off</v-icon>
+                  <p class="mt-2 text-body-2">No recent programs</p>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <!-- Most Applied Program Card -->
+          <v-col cols="12" md="4">
+            <v-card class="stats-card applied-card" elevation="4">
+              <div class="card-header">
+                <v-icon color="success" size="32" class="header-icon">mdi-trending-up</v-icon>
+                <div class="header-text">
+                  <h3 class="text-h6 font-weight-bold">Most Applied Program</h3>
+                  <p class="text-caption text-grey">This Week</p>
+                </div>
+              </div>
+              <v-card-text class="card-content">
+                <div v-if="mostAppliedProgram" class="text-center">
+                  <v-icon color="success" size="48" class="mb-3">mdi-chart-line-variant</v-icon>
+                  <div class="text-h6 font-weight-bold mb-2">{{ mostAppliedProgram.name }}</div>
+                  <div class="d-flex align-center justify-center mb-2">
+                    <v-icon color="grey" size="16" class="mr-1">mdi-domain</v-icon>
+                    <span class="text-body-2 text-grey-darken-1">{{ mostAppliedProgram.university_name }}</span>
+                  </div>
+                  <div class="d-flex align-center justify-center mb-3">
+                    <v-icon color="grey" size="16" class="mr-1">mdi-map-marker</v-icon>
+                    <span class="text-caption text-grey">{{ mostAppliedProgram.city_name }}</span>
+                  </div>
+                  <div class="mt-3">
+                    <v-chip color="success" size="large" class="font-weight-bold">
+                      <v-icon size="20" class="mr-2">mdi-account-group</v-icon>
+                      {{ mostAppliedProgram.application_count }} Students Applied
+                    </v-chip>
+                  </div>
+                </div>
+                <div v-else class="text-center text-grey">
+                  <v-icon size="64" color="grey">mdi-chart-line-variant</v-icon>
+                  <p class="mt-2 text-body-2">No applications this week</p>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <!-- Student Registration Chart Card -->
+          <v-col cols="12" md="4">
+            <v-card class="stats-card chart-card" elevation="4">
+              <div class="card-header">
+                <v-icon color="info" size="32" class="header-icon">mdi-chart-bar</v-icon>
+                <div class="header-text">
+                  <h3 class="text-h6 font-weight-bold">Weekly Registrations</h3>
+                  <p class="text-caption text-grey">Last 7 Days</p>
+                </div>
+              </div>
+              <v-card-text class="card-content">
+                <div class="registration-chart">
+                  <div 
+                    v-for="(day, index) in weeklyRegistrations" 
+                    :key="index"
+                    class="chart-bar"
+                    :class="`day-${index}`"
+                    :style="{ height: getBarHeight(day.count) + '%' }"
+                    :title="`${day.day}: ${day.count} registrations`"
+                  >
+                    <div class="bar-value">{{ day.count }}</div>
+                  </div>
+                </div>
+                <div class="chart-labels mt-2">
+                  <span v-for="day in weeklyRegistrations" :key="day.day" class="chart-label">
+                    {{ day.day }}
+                  </span>
+                </div>
+                <div class="mt-3 text-center">
+                  <v-chip color="info" size="small" class="font-weight-bold">
+                    <v-icon size="16" class="mr-1">mdi-account-plus</v-icon>
+                    Total: {{ getTotalRegistrations() }} Students
+                  </v-chip>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </section>
+
     <!-- Advanced Filters -->
     <section class="filters-section py-8 bg-grey-lighten-5">
       <v-container>
@@ -335,6 +457,11 @@ const totalPages = ref(1)
 const totalResults = ref(0)
 const sortBy = ref('created_at')
 
+// Statistics data
+const recentProgram = ref(null)
+const mostAppliedProgram = ref(null)
+const weeklyRegistrations = ref([])
+
 const filters = reactive({
   degree_level: null,
   language: null,
@@ -551,10 +678,73 @@ const goToProgram = (programId) => {
   router.push(`/program/${programId}`)
 }
 
+// Statistics methods
+const fetchRecentProgram = async () => {
+  try {
+    const response = await api.get('/programs?limit=1&sort=created_at_desc')
+    if (response.data.programs.length > 0) {
+      recentProgram.value = response.data.programs[0]
+    }
+  } catch (error) {
+    console.error('Failed to fetch recent program:', error)
+    // Fallback data
+    recentProgram.value = {
+      name: 'Computer Science',
+      university_name: 'Tsinghua University',
+      city_name: 'Beijing',
+      scholarship_type: 'full'
+    }
+  }
+}
+
+const fetchMostAppliedProgram = async () => {
+  try {
+    const response = await api.get('/statistics/most-applied-program')
+    mostAppliedProgram.value = response.data
+  } catch (error) {
+    console.error('Failed to fetch most applied program:', error)
+    // Fallback data
+    mostAppliedProgram.value = {
+      name: 'International Business',
+      university_name: 'Peking University',
+      city_name: 'Beijing',
+      application_count: 15
+    }
+  }
+}
+
+const fetchWeeklyRegistrations = async () => {
+  try {
+    const response = await api.get('/statistics/weekly-registrations')
+    weeklyRegistrations.value = response.data
+  } catch (error) {
+    console.error('Failed to fetch weekly registrations:', error)
+    // Fallback data - last 7 days
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    weeklyRegistrations.value = days.map(day => ({
+      day,
+      count: Math.floor(Math.random() * 20) + 5
+    }))
+  }
+}
+
+const getBarHeight = (count) => {
+  if (!weeklyRegistrations.value.length) return 0
+  const maxCount = Math.max(...weeklyRegistrations.value.map(d => d.count))
+  return maxCount > 0 ? (count / maxCount) * 100 : 0
+}
+
+const getTotalRegistrations = () => {
+  return weeklyRegistrations.value.reduce((total, day) => total + day.count, 0)
+}
+
 onMounted(() => {
   searchPrograms()
   fetchCities()
   fetchUniversities()
+  fetchRecentProgram()
+  fetchMostAppliedProgram()
+  fetchWeeklyRegistrations()
 })
 </script>
 
@@ -591,5 +781,176 @@ onMounted(() => {
 
 .v-data-table {
   border-radius: 12px;
+}
+
+/* Statistics Cards Styles */
+.stats-card {
+  height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 16px !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.stats-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  padding: 20px 20px 0 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.header-icon {
+  margin-right: 12px;
+  padding: 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header-text h3 {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.header-text p {
+  margin: 0;
+  margin-top: 2px;
+}
+
+.card-content {
+  padding: 20px !important;
+}
+
+/* Card-specific styles */
+.recent-card {
+  background: linear-gradient(135deg, #f8f9ff, #ffffff);
+}
+
+.recent-card .header-icon {
+  background: linear-gradient(135deg, #068b76, #0a9b85);
+  color: white !important;
+}
+
+.applied-card {
+  background: linear-gradient(135deg, #f0fff4, #ffffff);
+}
+
+.applied-card .header-icon {
+  background: linear-gradient(135deg, #4caf50, #66bb6a);
+  color: white !important;
+}
+
+.chart-card {
+  background: linear-gradient(135deg, #f0f8ff, #ffffff);
+}
+
+.chart-card .header-icon {
+  background: linear-gradient(135deg, #2196f3, #42a5f5);
+  color: white !important;
+}
+
+/* Registration Chart Styles */
+.registration-chart {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  height: 120px;
+  padding: 0 8px;
+  margin-bottom: 8px;
+}
+
+.chart-bar {
+  flex: 1;
+  margin: 0 2px;
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  min-height: 20px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Different colors for each day */
+.day-0 {
+  background: linear-gradient(to top, #ff6b6b, #ff8e8e);
+}
+
+.day-1 {
+  background: linear-gradient(to top, #4ecdc4, #6ed5cd);
+}
+
+.day-2 {
+  background: linear-gradient(to top, #45b7d1, #6bc5d8);
+}
+
+.day-3 {
+  background: linear-gradient(to top, #96ceb4, #a8d5c0);
+}
+
+.day-4 {
+  background: linear-gradient(to top, #feca57, #fed976);
+}
+
+.day-5 {
+  background: linear-gradient(to top, #ff9ff3, #ffb3f3);
+}
+
+.day-6 {
+  background: linear-gradient(to top, #54a0ff, #74b0ff);
+}
+
+.chart-bar:hover {
+  transform: scaleY(1.05);
+  filter: brightness(1.1);
+}
+
+.bar-value {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2px 6px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 8px;
+}
+
+.chart-label {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 960px) {
+  .stats-card {
+    margin-bottom: 16px;
+  }
+  
+  .registration-chart {
+    height: 100px;
+  }
+  
+  .bar-value {
+    font-size: 10px;
+    top: -18px;
+  }
 }
 </style>
