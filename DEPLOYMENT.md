@@ -31,9 +31,9 @@
 2. **Configure Project Settings**
    - Framework Preset: `Other`
    - Root Directory: `./` (root)
-   - Build Command: `cd frontend && npm run build`
+   - Build Command: `npm run build`
    - Output Directory: `frontend/dist`
-   - Install Command: `npm install`
+   - Install Command: `npm run install-all`
 
 ### 3. Environment Variables Setup
 
