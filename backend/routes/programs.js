@@ -45,7 +45,7 @@ router.get('/', optionalAuth, async (req, res) => {
   }
 });
 
-// Get featured programs (public)
+// Get featured programs (public) ADD NEW
 router.get('/featured', async (req, res) => {
   try {
     const programs = await Program.getFeatured();
